@@ -10,6 +10,7 @@ const UserTable = "user"
 const LoginTable = "login"
 const slotTable = "slots"
 const doctorTable = "doctor"
+const BookingTable = "booking"
 
 type RepositoryImpl struct {
 	Db *gorm.DB
@@ -59,4 +60,19 @@ func (u RepositoryImpl) CheckLogin(username string, password string) error {
 		return fmt.Errorf("Incorrect password or incorrect username")
 	}
 	return nil
+}
+
+func (u RepositoryImpl) CreateBooking(testBooking *models.Booking) error {
+	err := u.Db.Table(BookingTable).Create(testBooking).Error
+	return err
+}
+
+func (u RepositoryImpl) GetBookings(username string) ([]models.Booking, error) {
+	var bookings []models.Booking
+	result := u.Db.Table(BookingTable).Where("username=?", username).Find(&bookings)
+	err := result.Error
+	if err != nil {
+		return nil, err
+	}
+	return bookings, nil
 }

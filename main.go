@@ -16,6 +16,7 @@ func main() {
 	db := config.DatabaseConnection()
 	db.Table(repository.UserTable).AutoMigrate(&models.UserProfile{})
 	db.Table(repository.LoginTable).AutoMigrate(&models.User{})
+	db.Table(repository.BookingTable).AutoMigrate(&models.Booking{})
 	repo := repository.NewUserRepository(db)
 	svc := service.NewServiceImpl(repo)
 	ctrl := controller.NewController(svc)

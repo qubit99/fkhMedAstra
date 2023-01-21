@@ -96,3 +96,33 @@ func (c *Controller) CreateAccount(ctx *gin.Context) {
 	err = c.svc.CreateAccount(&user)
 	ctx.JSON(http.StatusCreated, user)
 }
+
+func (c *Controller) CreateBooking(ctx *gin.Context) {
+	var booking models.Booking
+	err := ctx.ShouldBindJSON(&booking)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusAccepted, err)
+		return
+	}
+	err = c.svc.CreateBooking(&booking)
+	ctx.JSON(http.StatusCreated, booking)
+}
+
+func (c *Controller) GetBookings(ctx *gin.Context) {
+	username := ctx.Param("username")
+	if len(username) == 0 {
+		ctx.JSON(http.StatusBadRequest, "No username supplied")
+	}
+	bookings, err := c.svc.GetBookings(username)
+	if err == gorm.ErrRecordNotFound {
+		ctx.JSON(http.StatusNotFound, err)
+		return
+	}
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, bookings)
+
+}

@@ -37,3 +37,15 @@ func (s Service) CreateAccount(user *models.User) error {
 func (s Service) Login(username string, password string) error {
 	return s.repository.CheckLogin(username, password)
 }
+
+func (s Service) CreateBooking(booking *models.Booking) error {
+	return s.repository.CreateBooking(booking)
+}
+
+func (s Service) GetBookings(username string) ([]models.Booking, error) {
+	bookings, err := s.repository.GetBookings(username)
+	if err != nil {
+		return nil, err
+	}
+	return bookings, nil
+}
