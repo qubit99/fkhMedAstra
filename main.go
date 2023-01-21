@@ -17,6 +17,9 @@ func main() {
 	db.Table(repository.UserTable).AutoMigrate(&models.UserProfile{})
 	db.Table(repository.LoginTable).AutoMigrate(&models.User{})
 	db.Table(repository.BookingTable).AutoMigrate(&models.Booking{})
+	db.Table(repository.SlotTable).AutoMigrate(&models.Slot{})
+	db.Table(repository.DoctorTable).AutoMigrate(&models.Doctor{})
+
 	repo := repository.NewUserRepository(db)
 	svc := service.NewServiceImpl(repo)
 	ctrl := controller.NewController(svc)

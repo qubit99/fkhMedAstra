@@ -7,6 +7,7 @@ import (
 	"medastra/models"
 	"medastra/service"
 	"net/http"
+	"strconv"
 )
 
 type Controller struct {
@@ -125,4 +126,64 @@ func (c *Controller) GetBookings(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, bookings)
 
+func (c *Controller) GetDoctors(ctx *gin.Context) {
+	var searchReq models.DoctorSearchRequest
+	err := ctx.ShouldBindJSON(&searchReq)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+	doctorsResponse, err := c.svc.GetDoctors(&searchReq)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, doctorsResponse)
+}
+
+func (c *Controller) BookSlot(ctx *gin.Context) {
+	username := ctx.Param("username")
+	slotIdStr := ctx.Param("slotId")
+
+	slotId, err := strconv.Atoi(slotIdStr)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+	}
+	err = c.svc.BookSlot(username, slotId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, "Booked")
+}
+
+func (c *Controller) UserBookings(ctx *gin.Context) {
+	username := ctx.Param("username")
+	bookings, err := c.svc.UserBookings(username)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusInternalServerError, nil)
+		return
+	}
+	ctx.JSON(http.StatusOK, bookings)
+}
+
+func (c *Controller) DoctorBookings(ctx *gin.Context) {
+	doctoridStr := ctx.Param("id")
+	doctorId, err := strconv.Atoi(doctoridStr)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+
+	bookings, err := c.svc.DoctorBookings(doctorId)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusInternalServerError, nil)
+		return
+	}
+	ctx.JSON(http.StatusOK, bookings)
 }
