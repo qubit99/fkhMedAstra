@@ -125,6 +125,7 @@ func (c *Controller) GetBookings(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, bookings)
+}
 
 func (c *Controller) GetDoctors(ctx *gin.Context) {
 	var searchReq models.DoctorSearchRequest
