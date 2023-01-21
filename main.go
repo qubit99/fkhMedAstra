@@ -17,6 +17,8 @@ func main() {
 	db.Table(repository.UserTable).AutoMigrate(&models.UserProfile{})
 	db.Table(repository.LoginTable).AutoMigrate(&models.User{})
 	db.Table(repository.BookingTable).AutoMigrate(&models.Booking{})
+	db.Table(repository.TestBookingTable).AutoMigrate(&models.Testbookings{})
+	db.Table(repository.TestResults).AutoMigrate(&models.TestResults{})
 	db.Table(repository.SlotTable).AutoMigrate(&models.Slot{})
 	db.Table(repository.DoctorTable).AutoMigrate(&models.Doctor{})
 

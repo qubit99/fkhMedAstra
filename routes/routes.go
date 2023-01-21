@@ -21,6 +21,7 @@ func NewRouter(controller *controller.Controller) *gin.Engine {
 	router := service.Group("/api/v1/")
 	userRouter := router.Group("/user/")
 	doctorRouter := router.Group("/doctor/")
+	testRouter := router.Group("/test/")
 
 	doctorRouter.POST("/search", controller.GetDoctors)
 	doctorRouter.GET("/bookings/:id", controller.DoctorBookings)
@@ -35,6 +36,11 @@ func NewRouter(controller *controller.Controller) *gin.Engine {
 	userRouter.GET("/userprofile/:username", controller.FindUserByUsername)
 	userRouter.GET("/slot/:slotId/:username", controller.BookSlot)
 	userRouter.GET("/bookings/:username", controller.UserBookings)
+
+	testRouter.POST("/create", controller.CreateBooking)
+	testRouter.GET("/get/:username", controller.GetBookings)
+	testRouter.POST("/create_result", controller.CreateTestResult)
+	testRouter.GET("/get_results/:username", controller.GetTestResults)
 
 	return service
 }

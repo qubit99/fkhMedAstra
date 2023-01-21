@@ -70,14 +70,26 @@ func (s Service) Login(username string, password string) error {
 	return s.repository.CheckLogin(username, password)
 }
 
-func (s Service) CreateBooking(booking *models.Booking) error {
+func (s Service) CreateBooking(booking *models.Testbookings) error {
 	return s.repository.CreateBooking(booking)
 }
 
-func (s Service) GetBookings(username string) ([]models.Booking, error) {
+func (s Service) GetBookings(username string) ([]models.Testbookings, error) {
 	bookings, err := s.repository.GetBookings(username)
 	if err != nil {
 		return nil, err
 	}
 	return bookings, nil
+}
+
+func (s Service) CreateTestResults(testResult *models.TestResults) error {
+	return s.repository.CreateTestResults(testResult)
+}
+
+func (s Service) GetTestResults(username string) ([]models.TestResults, error) {
+	testRecords, err := s.repository.GetTestResults(username)
+	if err != nil {
+		return nil, err
+	}
+	return testRecords, nil
 }

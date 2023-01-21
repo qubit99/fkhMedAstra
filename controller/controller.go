@@ -99,7 +99,7 @@ func (c *Controller) CreateAccount(ctx *gin.Context) {
 }
 
 func (c *Controller) CreateBooking(ctx *gin.Context) {
-	var booking models.Booking
+	var booking models.Testbookings
 	err := ctx.ShouldBindJSON(&booking)
 	if err != nil {
 		log.Println(err)
@@ -187,4 +187,35 @@ func (c *Controller) DoctorBookings(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, bookings)
+}
+
+func (c *Controller) CreateTestResult(ctx *gin.Context) {
+
+	var result models.TestResults
+	err := ctx.ShouldBindJSON(&result)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusAccepted, err)
+		return
+	}
+	err = c.svc.CreateTestResults(&result)
+	ctx.JSON(http.StatusCreated, result)
+
+}
+
+func (c *Controller) GetTestResults(ctx *gin.Context) {
+	username := ctx.Param("username")
+	if len(username) == 0 {
+		ctx.JSON(http.StatusBadRequest, "No username supplied")
+	}
+	results, err := c.svc.GetTestResults(username)
+	if err == gorm.ErrRecordNotFound {
+		ctx.JSON(http.StatusNotFound, err)
+		return
+	}
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, results)
 }

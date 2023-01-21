@@ -12,6 +12,8 @@ const LoginTable = "login"
 const SlotTable = "slots"
 const DoctorTable = "doctor"
 const BookingTable = "booking"
+const TestBookingTable = "testbooking"
+const TestResults = "testResults"
 
 type RepositoryImpl struct {
 	Db *gorm.DB
@@ -84,19 +86,38 @@ func (u RepositoryImpl) CheckLogin(username string, password string) error {
 	return nil
 }
 
-func (u RepositoryImpl) CreateBooking(testBooking *models.Booking) error {
-	err := u.Db.Table(BookingTable).Create(testBooking).Error
+func (u RepositoryImpl) CreateBooking(testBooking *models.Testbookings) error {
+	err := u.Db.Table(TestBookingTable).Create(testBooking).Error
 	return err
 }
 
-func (u RepositoryImpl) GetBookings(username string) ([]models.Booking, error) {
-	var bookings []models.Booking
-	result := u.Db.Table(BookingTable).Where("username=?", username).Find(&bookings)
+func (u RepositoryImpl) CreateTestResults(testResult *models.TestResults) error {
+	err := u.Db.Table(TestResults).Create(testResult).Error
+	return err
+}
+
+func (u RepositoryImpl) GetBookings(username string) ([]models.Testbookings, error) {
+	var bookings []models.Testbookings
+	fmt.Println(username)
+	result := u.Db.Table(TestBookingTable).Where("username=?", username).Find(&bookings)
 	err := result.Error
 	if err != nil {
 		return nil, err
 	}
 	return bookings, nil
+}
+
+func (u RepositoryImpl) GetTestResults(username string) ([]models.TestResults, error) {
+	var testRecords []models.TestResults
+	var bookingIds []int
+	u.Db.Table(TestBookingTable).Select("id").Where("username =?", username).Find(&bookingIds)
+	fmt.Println(bookingIds)
+	result := u.Db.Table(TestResults).Where("booking_id IN ?", bookingIds).Find(&testRecords)
+	err := result.Error
+	if err != nil {
+		return nil, err
+	}
+	return testRecords, nil
 }
 
 func (u RepositoryImpl) CreateDoctor(doctor *models.Doctor) error {
