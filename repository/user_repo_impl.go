@@ -97,6 +97,8 @@ func (u RepositoryImpl) GetBookings(username string) ([]models.Booking, error) {
 		return nil, err
 	}
 	return bookings, nil
+}
+
 func (u RepositoryImpl) CreateDoctor(doctor *models.Doctor) error {
 	return u.Db.Table(DoctorTable).Create(doctor).Error
 }
