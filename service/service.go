@@ -31,6 +31,38 @@ func (s Service) GetUserProfile(userName string) (*models.UserProfile, error) {
 	return userProfile, nil
 }
 
+func (s Service) GetDoctors(req *models.DoctorSearchRequest) ([]*models.DoctorResponse, error) {
+	doctors, err := s.repository.SearchDoctors(req)
+	if err != nil {
+		return nil, err
+	}
+	doctorsResponse := make([]*models.DoctorResponse, 0)
+	for _, doctor := range doctors {
+		slots, err := s.repository.GetSlotsByDoctor(doctor.Id)
+		if err != nil {
+			log.Printf("Error getting slots for doctor %d : %s\n", doctor.Id, err)
+			continue
+		}
+		doctorResp := &models.DoctorResponse{
+			doctor,
+			slots,
+		}
+
+		doctorsResponse = append(doctorsResponse, doctorResp)
+	}
+	return doctorsResponse, nil
+}
+
+func (s Service) BookSlot(username string, slotId int) error {
+	return s.repository.BookSlot(username, slotId)
+}
+
+func (s Service) UserBookings(username string) ([]*models.UserBookingResponse, error) {
+	return s.repository.GetUserBookings(username)
+}
+func (s Service) DoctorBookings(doctorId int) ([]*models.DoctorBookingResponse, error) {
+	return s.repository.GetDoctorBookings(doctorId)
+}
 func (s Service) CreateAccount(user *models.User) error {
 	return s.repository.CreateLogin(user)
 }

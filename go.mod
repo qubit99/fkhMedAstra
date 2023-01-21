@@ -3,6 +3,7 @@ module medastra
 go 1.19
 
 require (
+	github.com/bxcodec/faker/v4 v4.0.0-beta.3
 	github.com/gin-gonic/gin v1.8.2
 	gorm.io/driver/sqlite v1.4.4
 	gorm.io/gorm v1.24.3
