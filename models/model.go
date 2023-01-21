@@ -38,7 +38,7 @@ type SlotSearchResponse struct {
 GET /getUserbyId/:id
 POST /signup/ {username: , password: } --> userId
 POST /createProfile/ {userprofile} --> userprofile
-PUT /updateProfile/ {userprofile} --> userprofile
+PUT /updateProfile/:username {userprofile} --> userprofile
 GET /searchDoctor/ {doctorsearch request} -> []Doctors
 GET /getSlots/ {slotsearch } --> SlotSearchResponse[]
 PUT /bookSlot/:id?userId=userId -->

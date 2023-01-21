@@ -20,5 +20,8 @@ func NewRouter(controller *controller.Controller) *gin.Engine {
 	router := service.Group("/api/v1/")
 	userRouter := router.Group("/user/")
 	userRouter.POST("/userprofile/", controller.CreateUserProfile)
+	userRouter.PUT("/userprofile/:username", controller.UpdateUserProfile)
+	userRouter.GET("/userprofile/:username", controller.FindUserByUsername)
+
 	return service
 }
