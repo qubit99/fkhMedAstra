@@ -45,9 +45,8 @@ func (u RepositoryImpl) FindProfileByUserName(username string) (*models.UserProf
 	}
 	return &result, nil
 }
-func (u RepositoryImpl) CreateLogin(username string, password string) error {
-	var userLogin models.User
-	err := u.Db.Table(LoginTable).Create(&userLogin).Error
+func (u RepositoryImpl) CreateLogin(userLogin *models.User) error {
+	err := u.Db.Table(LoginTable).Create(userLogin).Error
 	return err
 }
 func (u RepositoryImpl) CheckLogin(username string, password string) error {

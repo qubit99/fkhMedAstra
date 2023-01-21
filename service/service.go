@@ -30,3 +30,10 @@ func (s Service) GetUserProfile(userName string) (*models.UserProfile, error) {
 	}
 	return userProfile, nil
 }
+
+func (s Service) CreateAccount(user *models.User) error {
+	return s.repository.CreateLogin(user)
+}
+func (s Service) Login(username string, password string) error {
+	return s.repository.CheckLogin(username, password)
+}

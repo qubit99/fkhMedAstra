@@ -15,6 +15,6 @@ type UserProfile struct {
 	BloodGroup string    `gorm:"type:varchar(4)" json:"blood_group"`
 }
 type User struct {
-	Username string `gorm:"type:varchar(255);primary_key" json:"user"`
+	Username string `gorm:"type:varchar(255);primary_key" json:"username"`
 	Password string `gorm:"type:varchar(255)" json:"password"`
 }

@@ -66,5 +66,33 @@ func (c *Controller) FindUserByUsername(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, user)
+}
 
+func (c *Controller) Login(ctx *gin.Context) {
+	var user models.User
+	err := ctx.ShouldBindJSON(&user)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+	err = c.svc.Login(user.Username, user.Password)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusUnauthorized, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, "Login successful")
+}
+
+func (c *Controller) CreateAccount(ctx *gin.Context) {
+	var user models.User
+	err := ctx.ShouldBindJSON(&user)
+	if err != nil {
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+	err = c.svc.CreateAccount(&user)
+	ctx.JSON(http.StatusCreated, user)
 }

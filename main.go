@@ -15,6 +15,7 @@ import (
 func main() {
 	db := config.DatabaseConnection()
 	db.Table(repository.UserTable).AutoMigrate(&models.UserProfile{})
+	db.Table(repository.LoginTable).AutoMigrate(&models.User{})
 	repo := repository.NewUserRepository(db)
 	svc := service.NewServiceImpl(repo)
 	ctrl := controller.NewController(svc)
