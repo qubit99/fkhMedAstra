@@ -1,37 +1,26 @@
 package models
 
-import "time"
-
-type Slots struct {
-	SlotId   int
-	DoctorId int
-	Interval string
-	Date     time.Time
-	Capacity int
-}
-
-type DiagnosticsTest struct {
-	//report
-}
-
-type BookDiagnosticTest struct {
-	Type   string
-	Fee    int
-	Date   time.Time
-	UserId int
+type Slot struct {
+	SlotId   int    `gorm:"type:int;primary_key" json:"slot_id"`
+	DoctorId int    `gorm:"type:int" json:"doctor_id"`
+	Interval string `gorm:"type:string" json:"interval"`
+	Date     string `gorm:"type:date" json:"date"`
+	Capacity int    `gorm:"type:int" json:"capacity"`
 }
 
 type Booking struct {
 	SlotId   int
-	Username int
+	Username string
+	DoctorId int
 }
 
-type SlotSearchRequest struct {
-	Specialities []string
-	City         string
-	orderby      string
+type UserBookingResponse struct {
+	Slot   *Slot   `json:"slot"`
+	Doctor *Doctor `json:"doctor"`
 }
-type SlotSearchResponse struct {
+type DoctorBookingResponse struct {
+	Slot *Slot        `json:"slot"`
+	User *UserProfile `json:"user"`
 }
 
 /*
